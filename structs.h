@@ -8,7 +8,7 @@
 typedef struct PairDouble
 {
     double x, y;
-} PairDouble;
+} Vector2;
 
 typedef struct PairInt
 {
@@ -25,12 +25,21 @@ typedef struct Color
     uint8_t r, g, b;
 } Color;
 
+typedef enum BlockType
+{
+    CONCRETE,
+    SAND,
+    WATER
+} BlockType;
+
 struct BlockEntry;
 
 typedef struct Block
 {
     struct BlockEntry *entry;
+    BlockType type;
     PairInt location;
+    int gravity;
     Color color;
 } Block;
 
