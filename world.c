@@ -39,7 +39,7 @@ void getBlock(World *w, int x, int y, Block **b)
     else *b = be->block;
 }
 
-void createBlock(World *w, Block **b, BlockType t, int x, int y)
+void addBlock(World *w, Block **b, BlockType t, int x, int y)
 {
     if (x < -1 || x > w->width || y < -1 || y >= w->height)
     {
@@ -57,10 +57,8 @@ void createBlock(World *w, Block **b, BlockType t, int x, int y)
         return;
     }
 
-    nb = malloc(sizeof(Block));
-    nb->type = t;
+    createBlock(&nb, t);
     nb->location = (PairInt) {x, y};
-    nb->gravity = 1;
 
     BlockEntry *tailp = w->blockTrailer->prev;
     BlockEntry *newbe = malloc(sizeof(BlockEntry));
@@ -122,7 +120,7 @@ void deleteBlock(World *w, Block *b)
 
     setBlockEntry(w, b->location.x, b->location.y, NULL);
 
-    free(b);
+    destroyBlock(b);
 
     BlockEntry *p = e->prev;
     BlockEntry *n = e->next;
@@ -145,19 +143,19 @@ void createWorld(World **w, int width, int height)
     nw->blockTrailer = malloc(sizeof(BlockEntry));
     nw->blockHeader->next = nw->blockTrailer;
     nw->blockTrailer->prev = nw->blockHeader;
-    nw->blockLocations = malloc(sizeof(BlockEntry *) * nw->simWidth * nw->simHeight);
+    nw->blockLocations = calloc(nw->simWidth * nw->simHeight, sizeof(BlockEntry *));
 
     Block *b;
     for (int x = -1; x <= width; ++x)
     {
-        createBlock(nw, &b, CONCRETE, x, -1);
+        addBlock(nw, &b, CONCRETE, x, -1);
         b->gravity = 0;
     }
     for (int y = 0; y < height; ++y)
     {
-        createBlock(nw, &b, CONCRETE, -1, y);
+        addBlock(nw, &b, CONCRETE, -1, y);
         b->gravity = 0;
-        createBlock(nw, &b, CONCRETE, width, y);
+        addBlock(nw, &b, CONCRETE, width, y);
         b->gravity = 0;
     }
 
@@ -177,4 +175,21 @@ void resetWorld(World *w)
             deleteBlock(w, b);
         }
     }
+}
+
+void destroyWorld(World *w)
+{
+    BlockEntry *e = w->blockHeader->next;
+    BlockEntry *n;
+    while (e != w->blockTrailer)
+    {
+        destroyBlock(e->block);
+        n = e->next;
+        free(e);
+        e = n;
+    }
+    free(w->blockHeader);
+    free(w->blockTrailer);
+
+    free(w->blockLocations);
 }

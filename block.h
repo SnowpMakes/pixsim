@@ -25,6 +25,10 @@ typedef struct Block_
     Color color;
 } Block;
 
+void createBlock(Block **b, BlockType t);
+
+void destroyBlock(Block *b);
+
 #define PIXSIM_BLOCK_H
 
 #endif //PIXSIM_BLOCK_H

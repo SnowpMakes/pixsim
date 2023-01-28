@@ -209,7 +209,7 @@ int main()
 
     Block *b;
 
-    //createBlock(&b, SAND, 0, 180);
+    //addBlock(&b, SAND, 0, 180);
     //b->color = (Color) {255, 255, 255};
 
     SDL_Window *window;
@@ -323,7 +323,7 @@ int main()
                         }
                         else
                         {
-                            createBlock(w, &b, nt, bx, by);
+                            addBlock(w, &b, nt, bx, by);
                             b->color = (Color) {nc.r, nc.g, nc.b};
                             b->gravity = brushGravity;
                         }
@@ -342,8 +342,8 @@ int main()
                 x2 = rand() % WIDTH;
             } while (x2 == x1);
 
-            createBlock(w, &bw1, WATER, x1, HEIGHT - 1);
-            createBlock(w, &bw2, WATER, x2, HEIGHT - 1);
+            addBlock(w, &bw1, WATER, x1, HEIGHT - 1);
+            addBlock(w, &bw2, WATER, x2, HEIGHT - 1);
             bw1->color = (Color) {0, 0, 255};
             bw2->color = (Color) {0, 0, 255};
         }

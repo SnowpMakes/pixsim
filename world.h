@@ -30,7 +30,7 @@ void setBlockEntry(World *w, int x, int y, BlockEntry *entry);
 
 void getBlock(World *w, int x, int y, Block **b);
 
-void createBlock(World *w, Block **b, BlockType t, int x, int y);
+void addBlock(World *w, Block **b, BlockType t, int x, int y);
 
 void moveBlock(World *w, Block *b, int x, int y);
 
@@ -41,6 +41,8 @@ void deleteBlock(World *w, Block *b);
 void createWorld(World **w, int width, int height);
 
 void resetWorld(World *w);
+
+void destroyWorld(World *w);
 
 #define PIXSIM_WORLD_H
 
